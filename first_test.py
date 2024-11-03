@@ -231,7 +231,7 @@ plt.show()
 # plt.xlabel("Cost (£)")
 # plt.show()
 
-# Cathrine
+# CS
 # count_df = df[df["Cost"].between(-3.75 , 17.46)] # for counting the number of cost values between 2 values: -3.75 , 17.46
 # print(count_df["Cost"].count())
 
@@ -244,10 +244,3 @@ plt.show()
 # 20.0    1
 
 
-# echo "# vouchers" >> README.md
-# git init
-# git add README.md
-# git commit -m "first commit"
-# git branch -M main
-# git remote add origin https://github.com/FerSar8765/vouchers.git
-# git push -u origin main
