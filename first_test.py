@@ -80,13 +80,47 @@ df.to_excel("Our_Cleaned_Data.xlsx")
 # VOUCHER          126.0
 
 # print(df["Cost"].sum())
+ 
 
-# # Counting each item by each payment method
-# # Standardize 'Payment Method' values to title case for consistency
+# ........................... Counting how many times each item was ordered. .................................. 
+# Flatten the list of lists into a single Series
+flat_items = pd.Series([item for sublist in df['Basket'] for item in sublist])
+
+# Count each unique item using value_counts
+item_counts_df = flat_items.value_counts().reset_index()
+item_counts_df.columns = ['Item', 'Count']
+
+# Display the result sorted by count
+item_counts_df = item_counts_df.sort_values(by='Count', ascending=False).reset_index(drop=True)
+print(item_counts_df)
+
+#              Item  Count
+# 0   HOT CHOCOLATE    239
+# 1      CAPPUCCINO    235
+# 2           MOCHA    225
+# 3           LATTE    223
+# 4             TEA    215
+# 5       AMERICANO    212
+# 6       CROISSANT     30
+# 7   BUTTERED ROLL     30
+# 8          MUFFIN     26
+# 9     STROOPWAFEL     25
+# 10          TOAST     24
+# 11         PANINI     19
+# 12   GIFT VOUCHER     11
+
+
+
+# ............................. Counting each item by each payment method ......................................
+# Standardize 'Payment Method' values to title case for consistency
 # df['Payment Method'] = df['Payment Method'].str.title()
 
 # # Get all unique items across baskets
 # unique_items = set(item for basket in df['Basket'] for item in basket)
+
+# # print(unique_items) 
+
+# unique_items_count = (df["Basket"].count() for basket in df["Basket"] for item in basket)
 
 # # Initialize an empty dictionary to store counts
 # item_payment_counts = {}
@@ -102,9 +136,9 @@ df.to_excel("Our_Cleaned_Data.xlsx")
 
 # # Display the results in a DataFrame for readability
 # item_payment_counts_df = pd.DataFrame(item_payment_counts).T
-# # print(item_payment_counts_df)
+# print(item_payment_counts_df)
 
-# Cash  Debit  Mobile Wallet  Credit  Voucher
+#                 Cash  Debit  Mobile Wallet  Credit  Voucher
 # Croissant         8     11              3       3        1
 # Muffin            4     14              1       2        2
 # Tea              42     74              8      30       12
@@ -182,20 +216,20 @@ df.to_excel("Our_Cleaned_Data.xlsx")
 # VOUCHER          6.930303
 
 
-mean_spend_payment_method_df = df.groupby("Payment Method")["Cost"].mean()
-color_bars = ['#800080', '#008000', '#00008b', '#add8e6', '#ffa500']
+# mean_spend_payment_method_df = df.groupby("Payment Method")["Cost"].mean()
+# color_bars = ['#800080', '#008000', '#00008b', '#add8e6', '#ffa500']
 
-bars = plt.bar(mean_spend_payment_method_df.index, mean_spend_payment_method_df.values, color=color_bars)
+# bars = plt.bar(mean_spend_payment_method_df.index, mean_spend_payment_method_df.values, color=color_bars)
 
-# Adding labels on each bar
-for bar in bars:
-    yval = bar.get_height()
-    plt.text(bar.get_x() + bar.get_width()/2, yval, round(yval, 2), ha='center', va='bottom')
+# # Adding labels on each bar
+# for bar in bars:
+#     yval = bar.get_height()
+#     plt.text(bar.get_x() + bar.get_width()/2, yval, round(yval, 2), ha='center', va='bottom')
 
-plt.title("Average Spend per Transaction per Payment Type")
-plt.xlabel("Payment Method")
-plt.ylabel("Spend £")
-plt.show()
+# plt.title("Average Spend per Transaction per Payment Type")
+# plt.xlabel("Payment Method")
+# plt.ylabel("Spend £")
+# plt.show()
 
 
 
@@ -209,15 +243,30 @@ plt.show()
 # So they worth it. 
 # 1051 for the software x * (228.7 - 56) = 1051 >>>>>> after 6 weeks, using VOUCHERS can benefit the store. 
 
-# 
-
-
-
-
-
-
-
-
+# cost_per_voucher = 0.91
+# vouchers_per_week = 33
+# weekly_income = 228.7
+# software_cost = 1051
+ 
+ 
+# weekly_voucher_cost = vouchers_per_week * cost_per_voucher
+# weekly_profit = weekly_income - weekly_voucher_cost
+ 
+# weeks = np.arange(1, 27)
+# # numerical range half a year
+# profit = np.cumsum([weekly_profit] * len(weeks)) - software_cost
+# # np.cumsum returns the cumalative sum
+# plt.figure(figsize=(10, 6))
+# # width then height
+# plt.plot(weeks, profit, label="Cumulative Profit")
+# plt.axhline(0, color='gray', linestyle='--', label="Break-even Point")
+ 
+# plt.xlabel("Weeks")
+# plt.ylabel("Cumulative Profit from Investment (£)")
+# plt.title("Voucher Cumulative Profit Over Time")
+# plt.legend()
+# plt.grid(True)
+# plt.show()
 
 
 
